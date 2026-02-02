@@ -2,10 +2,10 @@ import hre from "hardhat";
 
 async function main() {
   // Arc Testnet USDC address - UPDATE THIS with actual Arc testnet USDC
-  const USDC_ADDRESS = process.env.ARC_USDC_ADDRESS || "0x..."; // Replace with actual address
+  const USDC_ADDRESS = process.env.ARC_USDC_ADDRESS;
   
   // Arc Testnet Chain ID - UPDATE THIS with actual Arc testnet chain ID
-  const ARC_CHAIN_ID = process.env.ARC_CHAIN_ID || 412346; // Replace with actual chain ID
+  const ARC_CHAIN_ID = process.env.ARC_CHAIN_ID;
 
   console.log("Deploying AequorTreasury...");
   console.log("USDC Address:", USDC_ADDRESS);
@@ -19,7 +19,6 @@ async function main() {
   const deployedAddress = await treasury.getAddress();
   
   console.log("✅ AequorTreasury deployed to:", deployedAddress);
-  console.log("📝 Save this info to docs/contracts.md");
   console.log("\nContract Details:");
   console.log("- Network: Arc Testnet");
   console.log("- Contract: Treasury");
