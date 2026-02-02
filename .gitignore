@@ -1,11 +1,58 @@
+# =========================
+# Node / JavaScript
+# =========================
 node_modules/
-dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Environment variables
+# =========================
 .env
-*.log
-.DS_Store
+.env.*
+!.env.example
+
+# =========================
+# Hardhat
+# =========================
+artifacts/
+cache/
 coverage/
-.nyc_output/
+coverage.json
+typechain/
+typechain-types/
+gas-report.txt
+
+# =========================
+# Frontend (React / Vite / Next)
+# =========================
+dist/
+build/
+.next/
+out/
+.vite/
+
+# =========================
+# Backend
+# =========================
+logs/
+*.log
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
 *.swp
 *.swo
-*~
+
+# =========================
+# Misc
+# =========================
+*.pem
+*.key
 docs/

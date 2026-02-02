@@ -1,0 +1,24 @@
+{
+  "name": "aequor",
+  "version": "1.0.0",
+  "description": "Aequor is a chain-abstracted USDC treasury where Arc routes liquidity across chains automatically.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "hardhat": "^2.28.4"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^17.2.3"
+  },
+  "type": "module"
+}
