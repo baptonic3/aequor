@@ -11,6 +11,7 @@ export default {
     arcTestnet: {
       url: ARC_RPC_URL,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      timeout: 60000, // 60 seconds (default is 20 seconds)
     },
   },
 };
