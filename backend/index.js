@@ -1,8 +1,9 @@
 import { ethers } from "ethers";
 import dotenv from "dotenv";
 import TreasuryABI from "./TreasuryABI.json" with { type: "json" };
+import { settleUSDC } from "./circle.js";
 
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC_URL);
 
@@ -15,12 +16,13 @@ const treasury = new ethers.Contract(
 console.log(" Aequor Executor listening on Arc...");
 console.log(" Treasury:", process.env.TREASURY_ADDRESS);
 console.log(" RPC:", process.env.ARC_RPC_URL);
-console.log(" Waiting for cross-chain settlement intents...\n");
+console.log(" Circle Gateway:", process.env.CIRCLE_API_KEY ? "✅ connected" : "⚠️  not configured");
+console.log("⏳ Waiting for cross-chain settlement intents...\n");
 
 treasury.on(
   "CrossChainSettlementRequested",
   async (recipientId, recipient, destChainId, amount, event) => {
-    console.log("\n Intent detected:");
+    console.log("\n Arc intent detected:");
     console.log({
       recipientId: recipientId.toString(),
       recipient,
@@ -29,56 +31,33 @@ treasury.on(
       txHash: event.log.transactionHash,
     });
 
-    // Step 1: Resolve route (mock)
-    const route = resolveRoute(destChainId);
+    try {
+      // Execute cross-chain settlement via Circle Gateway
+      const result = await settleUSDC({
+        amount: amount.toString(),
+        destinationChain: destChainId.toString(),
+        destinationAddress: recipient,
+      });
 
-    // Step 2: Simulate execution
-    await simulateExecution(route, recipient, amount);
+      if (result.success) {
+        console.log("   USDC settlement triggered via Circle Gateway");
+        console.log("   Settlement ID:", result.transferId);
+        console.log("   Status:", result.status);
+        if (result.simulation) {
+          console.log("   ⚠️  Note: Running in simulation mode");
+        }
+      }
 
-    console.log(" Settlement flow completed\n");
+      console.log("✅ Settlement flow completed\n");
+    } catch (error) {
+      console.error("❌ Settlement failed:");
+      console.error("   Error:", error.message);
+      console.log("");
+    }
   }
 );
 
-function resolveRoute(destChainId) {
-  console.log(" Resolving route for chain:", destChainId.toString());
-
-  // Map chain IDs to chain names for better readability
-  const chainNames = {
-    1: "Ethereum",
-    10: "Optimism",
-    137: "Polygon",
-    8453: "Base",
-    42161: "Arbitrum",
-    43114: "Avalanche",
-  };
-
-  const chainName = chainNames[Number(destChainId)] || `Chain ${destChainId}`;
-
-  return {
-    destination: chainName,
-    provider: "LI.FI (simulated)",
-    bridge: "MockBridge",
-    estimatedTime: "45s",
-    estimatedFee: "0.05 USDC",
-  };
-}
-
-async function simulateExecution(route, recipient, amount) {
-  console.log("Executing settlement:");
-  console.log({
-    destination: route.destination,
-    provider: route.provider,
-    recipient,
-    amount: amount.toString(),
-    estimatedTime: route.estimatedTime,
-    estimatedFee: route.estimatedFee,
-  });
-
-  // Simulate processing time
-  await new Promise((r) => setTimeout(r, 1000));
-
-  console.log("USDC delivered (simulated)");
-}
+// Mock functions removed - now using real Circle Gateway settlement
 
 // Handle graceful shutdown
 process.on("SIGINT", () => {
