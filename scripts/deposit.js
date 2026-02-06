@@ -6,6 +6,7 @@ async function main() {
   
   // Amount to deposit (1 USDC = 1000000 with 6 decimals)
   const DEPOSIT_AMOUNT = "1000000"; // 1 USDC
+  // const DEPOSIT_AMOUNT = "10000000"; // 10 USDC
 
   console.log("💰 Depositing USDC to Treasury...");
   console.log("   Treasury:", TREASURY_ADDRESS);
@@ -37,13 +38,13 @@ async function main() {
   }
 
   // Step 1: Approve Treasury to spend USDC
-  console.log("\n1️ Approving Treasury to spend USDC...");
+  console.log("\n Approving Treasury to spend USDC...");
   const approveTx = await usdc.approve(TREASURY_ADDRESS, DEPOSIT_AMOUNT);
   await approveTx.wait();
   console.log("   ✅ Approved");
 
   // Step 2: Deposit to Treasury
-  console.log("\n2️ Depositing to Treasury...");
+  console.log("\n Depositing to Treasury...");
   const treasury = await hre.ethers.getContractAt("Treasury", TREASURY_ADDRESS);
   const depositTx = await treasury.deposit(DEPOSIT_AMOUNT);
   await depositTx.wait();

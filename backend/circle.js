@@ -7,13 +7,18 @@ const BASE_URL = "https://gateway-api-testnet.circle.com/v1";
 
 // Map chain IDs to Circle chain identifiers
 const CHAIN_ID_TO_CIRCLE = {
-  1: "ETH",
-  10: "OPTIMISM",
-  137: "MATIC",
-  8453: "BASE",
-  42161: "ARBITRUM",
-  43114: "AVALANCHE",
-  5042002: "ARC", // Arc testnet 
+  1: "Ethereum",
+  5: "Goerli",
+  11155111: "Sepolia",
+  137: "Polygon",
+  80001: "Mumbai",
+  8453: "Base",
+  84531: "Base Goerli",
+  5042002: "Arc Testnet", // Arc testnet chain ID
+  42161: "Arbitrum",
+  421613: "Arbitrum Goerli",
+  10: "Optimism",
+  420: "Optimism Goerli",
 };
 
 /**
@@ -79,17 +84,6 @@ export async function settleUSDC({ amount, destinationChain, destinationAddress 
     console.error("   Message:", error.response?.data?.message || error.message);
     console.error("   Code:", error.response?.data?.code || "UNKNOWN");
     
-    // For demo purposes, you might want to simulate success in development
-    if (process.env.CIRCLE_SIMULATE === "true") {
-      console.log("⚠️  SIMULATION MODE: Pretending transfer succeeded");
-      return {
-        success: true,
-        transferId: `sim-${Date.now()}`,
-        status: "simulated",
-        simulation: true,
-      };
-    }
-
     throw error;
   }
 }

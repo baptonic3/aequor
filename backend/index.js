@@ -5,7 +5,10 @@ import { settleUSDC } from "./circle.js";
 
 dotenv.config({ path: '../.env' });
 
-const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC_URL);
+// Normalize RPC URL to avoid issues with accidental leading/trailing spaces
+const ARC_RPC_URL = (process.env.ARC_RPC_URL || "").trim();
+
+const provider = new ethers.JsonRpcProvider(ARC_RPC_URL);
 
 const treasury = new ethers.Contract(
   process.env.TREASURY_ADDRESS,
@@ -15,7 +18,7 @@ const treasury = new ethers.Contract(
 
 console.log(" Aequor Executor listening on Arc...");
 console.log(" Treasury:", process.env.TREASURY_ADDRESS);
-console.log(" RPC:", process.env.ARC_RPC_URL);
+console.log(" RPC:", ARC_RPC_URL);
 console.log(" Circle Gateway:", process.env.CIRCLE_API_KEY ? "✅ connected" : "⚠️  not configured");
 console.log("⏳ Waiting for cross-chain settlement intents...\n");
 
@@ -56,8 +59,6 @@ treasury.on(
     }
   }
 );
-
-// Mock functions removed - now using real Circle Gateway settlement
 
 // Handle graceful shutdown
 process.on("SIGINT", () => {
