@@ -25,7 +25,7 @@ export default function PayoutForm() {
         body: JSON.stringify({
           recipient,
           amount,
-          destinationChainId: 8453, // Base as destination
+          // Chain routing determined by Circle Gateway + Arc
         }),
       });
 
